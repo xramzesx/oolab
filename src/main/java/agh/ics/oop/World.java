@@ -66,7 +66,7 @@ public class World {
                 })
                 .toArray(Direction[]::new);
     }
-    private static void printLine() {
+    public static void printLine() {
         out.println("-------------------------");
     }
 }
