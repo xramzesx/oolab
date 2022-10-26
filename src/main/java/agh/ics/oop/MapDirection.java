@@ -31,8 +31,6 @@ public enum MapDirection {
         for (MapDirection direction: vals ) {
             System.out.println(String.format("%s %s", direction, direction.toUnitVector()));
         }
-
-
     }
 
     public String toString() {
@@ -49,7 +47,7 @@ public enum MapDirection {
     }
 
     public MapDirection previous() {
-        return vals[ (this.ordinal() - 1 + vals.length ) % vals.length ];
+        return vals[ ( this.ordinal() - 1 + vals.length ) % vals.length ];
     }
 
     public Vector2d toUnitVector() {

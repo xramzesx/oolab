@@ -6,11 +6,32 @@ import static java.lang.System.out;
 public class World {
 
     public static void main ( String[] args ) {
-        Direction[] requests = convertToDirections(args);
-        out.println("system wystartowal");
+        Animal animal = new Animal();
+
+        out.println("Pozycja zwierzaka:");
+        out.println(animal);
+
+        MoveDirection[] directions = {
+                MoveDirection.RIGHT,
+                MoveDirection.FORWARD,
+                MoveDirection.FORWARD,
+                MoveDirection.FORWARD
+        };
+
+        for ( MoveDirection direction: directions ){
+            animal.move(direction);
+        }
 
         printLine();
-        run(requests);
+        out.println("Pozycja po ciągu wywołań testowych");
+        out.println(animal);
+
+        printLine();
+        MoveDirection[] requests = OptionsParser.parse(args);
+        out.println("\nsystem wystartowal");
+
+        printLine();
+        run(requests, animal);
 
         printLine();
         out.println("Komunikaty: " + String.join(
@@ -18,21 +39,25 @@ public class World {
                 Arrays
                         .stream(args)
                         .filter(
-                                direction -> Direction.toEnum(direction) != Direction.NONE
-                        )
+                                direction -> MoveDirection.toEnum(direction) != MoveDirection.NONE)
                         .toArray(String[]::new)
         ));
+
+        printLine();
+        out.println("Pozycja końcowa: " + animal);
 
         printLine();
         out.println("system zakonczyl dzialanie");
     }
 
-    private static void run (Direction[] requests) {
+    public static void run (MoveDirection[] requests, Animal animal) {
         // zad8: tu drobna modyfikacja, żeby nie wpływała
         // na dalszą część programu/wyświetlanego tekstu
         out.println("zwierzak wystartowal");
 
-        for (Direction request : requests ) {
+        for (MoveDirection request : requests ) {
+            animal.move(request);
+
             switch (request) {
                 case FORWARD:
                     out.println("Zwierzak idzie do przodu");
