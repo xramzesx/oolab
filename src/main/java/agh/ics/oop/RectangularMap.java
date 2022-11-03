@@ -6,9 +6,9 @@ public class RectangularMap implements IWorldMap{
     private int width;
     private int height;
 
-    private ArrayList<Animal> animals = new ArrayList<>();
-    private Vector2d startBorder = new Vector2d(0,0);
-    private Vector2d endBorder = new Vector2d(4,4);
+    private final ArrayList<Animal> animals = new ArrayList<>();
+    private final Vector2d startBorder = new Vector2d(0,0);
+    private final Vector2d endBorder;
 
     public RectangularMap(int width, int height) {
         this.width = width;

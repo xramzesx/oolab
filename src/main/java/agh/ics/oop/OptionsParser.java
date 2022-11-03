@@ -6,7 +6,7 @@ public class OptionsParser {
     public static MoveDirection[] parse ( String[] directions ) {
         return Arrays
                 .stream(directions)
-                .map(direction -> MoveDirection.toEnum(direction))
+                .map(MoveDirection::toEnum)
                 .filter(direction -> direction != MoveDirection.NONE)
                 .toArray(MoveDirection[]::new);
     }

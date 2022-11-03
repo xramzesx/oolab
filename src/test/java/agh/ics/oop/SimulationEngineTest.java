@@ -19,7 +19,7 @@ public class SimulationEngineTest {
     }
 
     @Test
-    void complicatedFirstStageTest() {
+    void complicatedBasicTest() {
         // data
         String[] args = {
                 "r","b","l","f","r","r","b","f","l","b","f",
@@ -46,17 +46,18 @@ public class SimulationEngineTest {
     }
 
     @Test
-    void complicatedSecondStageTest() {
+    void parseAndComplicatedMovesTest() {
         // data
         String[] args = {
                 "r","b","l","f","r","r","b","f","l","b","f",
                 "b","l","b","l","b","f","f","f","r","l","r",
-                "b","f","f","f","r","f","f","l","r","f","b",
+                "ba","sda","ab","adsl","hgb","fhrth","fda",
+                "b","f","f","f","r","f","f","l","right","f","b",
                 "b","l","f","b","b","b","l","f","b","f","b",
-                "f","l","b","f","b","r","l","l","f","b","b",
+                "f","l","b","f","b","r","l","left","f","b","b",
                 "r","r","l","r","f","l","l","f","b","f","b",
-                "l","f","b","l","f","f","f","b","l","f","l",
-                "b","r","f","f","f","f","b","b","b","l","b",
+                "l","f","b","l","forward","f","f","b","l","f","l",
+                "b","r","f","f","f","f","backward","b","b","l","b",
                 "l","f","b","l","b","b","b","f","b","f","b"
         };
 
@@ -74,7 +75,7 @@ public class SimulationEngineTest {
     }
 
     @Test
-    void complicatedThirdStageTest() {
+    void placeAndComplicatedMovesTest() {
         // data
         String[] args = {
                 "r","b","l","f","r","r","b","f","l","b","f",
@@ -109,7 +110,15 @@ public class SimulationEngineTest {
         // prepare
         MoveDirection[] directions = OptionsParser.parse(args);
         IWorldMap map = new RectangularMap(10, 10);
-        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4), new Vector2d(6,6) };
+        Vector2d[] positions = {
+                new Vector2d(2,2),
+                new Vector2d(3,4),
+                new Vector2d(3,4),
+                new Vector2d(6,6),
+                new Vector2d(6,6),
+                new Vector2d(6,6),
+                new Vector2d(6,6)
+        };
         SimulationEngine engine = new SimulationEngine(directions, map, positions);
         engine.run();
 
