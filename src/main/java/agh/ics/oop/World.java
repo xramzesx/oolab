@@ -6,27 +6,9 @@ import static java.lang.System.out;
 public class World {
 
     public static void main ( String[] args ) {
-        Animal animal = new Animal();
 
-        out.println("Pozycja zwierzaka:");
-        out.println(animal);
-
-        MoveDirection[] directions = {
-                MoveDirection.RIGHT,
-                MoveDirection.FORWARD,
-                MoveDirection.FORWARD,
-                MoveDirection.FORWARD
-        };
-
-        for ( MoveDirection direction: directions ){
-            animal.move(direction);
-        }
-
-        printLine();
-        out.println("Pozycja po ciągu wywołań testowych");
-        out.println(animal);
-
-        printLine();
+        /// FROM PREVIOUS LABS (UP TO 3RD) ///
+        Animal animal = new Animal( new RectangularMap(5,5) );
         MoveDirection[] requests = OptionsParser.parse(args);
         out.println("\nsystem wystartowal");
 
@@ -48,31 +30,32 @@ public class World {
 
         printLine();
         out.println("system zakonczyl dzialanie");
+
+        /// CURRENT LABS (FROM 4TH) ///
+
+        MoveDirection[] directions = OptionsParser.parse(args);
+        IWorldMap map = new RectangularMap(10, 5);
+        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
+        IEngine engine = new SimulationEngine(directions, map, positions);
+
+        out.println(engine);
+        engine.run();
+        out.println(engine);
     }
 
     public static void run (MoveDirection[] requests, Animal animal) {
-        // zad8: tu drobna modyfikacja, żeby nie wpływała
-        // na dalszą część programu/wyświetlanego tekstu
         out.println("zwierzak wystartowal");
 
         for (MoveDirection request : requests ) {
             animal.move(request);
 
             switch (request) {
-                case FORWARD:
-                    out.println("Zwierzak idzie do przodu");
-                    break;
-                case BACKWARD:
-                    out.println("Zwierzak idzie do tyłu");
-                    break;
-                case RIGHT:
-                    out.println("Zwierzak skręca w prawo");
-                    break;
-                case LEFT:
-                    out.println("Zwierzak skręca w lewo");
-                    break;
-                default:
-                    break;
+                case FORWARD -> out.println("Zwierzak idzie do przodu");
+                case BACKWARD -> out.println("Zwierzak idzie do tyłu");
+                case RIGHT -> out.println("Zwierzak skręca w prawo");
+                case LEFT -> out.println("Zwierzak skręca w lewo");
+                default -> {
+                }
             }
         }
 
