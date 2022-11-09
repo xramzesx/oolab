@@ -18,12 +18,13 @@ public class RectangularMap extends AbstractWorldMap{
     }
 
     @Override
-    protected void openMap() {
-
-    }
+    protected void openMap() {}
 
     @Override
-    protected void fitMap() {
+    protected void fitMap() {}
 
+    @Override
+    public int getPoint( Vector2d position ){
+        return 0;
     }
 }

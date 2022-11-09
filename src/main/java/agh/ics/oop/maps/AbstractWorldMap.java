@@ -51,6 +51,8 @@ abstract public class AbstractWorldMap implements IWorldMap {
     abstract protected void openMap();
     abstract protected void fitMap();
 
+    abstract public int getPoint(Vector2d position);
+
     @Override
     public String toString() {
         this.fitMap();

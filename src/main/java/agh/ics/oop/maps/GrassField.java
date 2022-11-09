@@ -12,6 +12,9 @@ public class GrassField extends AbstractWorldMap {
     private final ArrayList<Grass> grasses =  new ArrayList<>();
     private final int fieldCount;
 
+    private Vector2d startGrassBorder;
+    private Vector2d endGrassBorder;
+
     public GrassField( int grassField, ArrayList<Grass> grasses ) {
         this(grassField);
         this.grasses.clear();
@@ -26,30 +29,34 @@ public class GrassField extends AbstractWorldMap {
 
         this.openMap();
 
-        this.generateRandomGrass();
-    }
-
-    private void generateRandomGrass () {
-        this.grasses.clear();
-
-        Vector2d startB = new Vector2d(0,0);
-        Vector2d endB = new Vector2d(
+        this.startGrassBorder = new Vector2d(0,0);
+        this.endGrassBorder = new Vector2d(
                 (int) Math.sqrt(10 * this.fieldCount),
                 (int) Math.sqrt(10 * this. fieldCount)
         );
 
+        this.generateRandomGrasses();
+
+    }
+
+    private void generateRandomGrass() {
+        Vector2d position;
+
+        do {
+            position = Utils.getRandomVector2d(
+                    this.startGrassBorder,
+                    this.endGrassBorder
+            );
+        } while ( this.objectAt(position) instanceof Grass || isOccupied(position) );
+
+        this.grasses.add( new Grass(position));
+
+    }
+    private void generateRandomGrasses () {
+        this.grasses.clear();
 
         for (int i = 0; i < this.fieldCount; i++ ) {
-            Vector2d position;
-
-            do {
-                position = Utils.getRandomVector2d(
-                        startB,
-                        endB
-                );
-            } while ( this.objectAt(position) instanceof Grass );
-
-            this.grasses.add( new Grass(position));
+            this.generateRandomGrass();
         }
     }
 
@@ -101,4 +108,16 @@ public class GrassField extends AbstractWorldMap {
         this.endBorder = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
 
+    @Override
+    public int getPoint(Vector2d position) {
+        Object object = this.objectAt(position);
+
+        if ( object instanceof Grass ) {
+            this.grasses.remove(object);
+            this.generateRandomGrass();
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }

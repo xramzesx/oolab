@@ -7,6 +7,8 @@ import agh.ics.oop.interfaces.IWorldMap;
 
 public class Animal extends AbstactWorldMapElement {
     private IWorldMap map;
+    public int points = 0;
+
     public Animal( IWorldMap map ){
         this.map = map;
     }
@@ -44,8 +46,10 @@ public class Animal extends AbstactWorldMapElement {
                 Vector2d position = MoveDirection.FORWARD == direction
                         ? this.position.add(this.orientation.toUnitVector())
                         : this.position.subtract(this.orientation.toUnitVector());
-                if (this.map.canMoveTo(position))
+                if (this.map.canMoveTo(position)) {
+                    this.points += this.map.getPoint( position );
                     this.position = position;
+                }
             }
         }
     }
