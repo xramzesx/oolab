@@ -3,10 +3,9 @@ package agh.ics.oop.elements;
 import agh.ics.oop.Vector2d;
 import agh.ics.oop.enums.MapDirection;
 import agh.ics.oop.enums.MoveDirection;
-import agh.ics.oop.interfaces.IMapElement;
 import agh.ics.oop.interfaces.IWorldMap;
 
-public class Animal implements IMapElement {
+public class Animal extends AbstactWorldMapElement {
     private IWorldMap map;
     public Animal( IWorldMap map ){
         this.map = map;
@@ -18,7 +17,7 @@ public class Animal implements IMapElement {
     }
 
     private MapDirection orientation = MapDirection.NORTH;
-    private Vector2d position = new Vector2d(2,2);
+    protected Vector2d position = new Vector2d(2,2);
 
     public String toString() {
         return switch (this.orientation) {
