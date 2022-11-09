@@ -1,5 +1,10 @@
 package agh.ics.oop;
 
+import agh.ics.oop.elements.Animal;
+import agh.ics.oop.enums.MoveDirection;
+import agh.ics.oop.interfaces.IEngine;
+import agh.ics.oop.interfaces.IWorldMap;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -64,7 +69,7 @@ public class SimulationEngine implements IEngine {
         for( Vector2d position: positions ) {
             Animal animal = new Animal( this.map, position );
 
-            if ( this.map.canMoveTo(animal.getPosition()) ){
+            if ( this.map.canMoveTo(position) ){
                 this.map.place(animal);
                 this.animals.add(animal);
             }

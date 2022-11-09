@@ -1,6 +1,12 @@
-package agh.ics.oop;
+package agh.ics.oop.elements;
 
-public class Animal {
+import agh.ics.oop.Vector2d;
+import agh.ics.oop.enums.MapDirection;
+import agh.ics.oop.enums.MoveDirection;
+import agh.ics.oop.interfaces.IMapElement;
+import agh.ics.oop.interfaces.IWorldMap;
+
+public class Animal implements IMapElement {
     private IWorldMap map;
     public Animal( IWorldMap map ){
         this.map = map;

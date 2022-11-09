@@ -104,7 +104,7 @@ public class Vector2d {
         System.out.println(position2);
         System.out.println(position1.add(position2));
     }
-
+    @Override
     public String toString() {
         return String.format("(%d,%d)", this.x, this.y);
     }
