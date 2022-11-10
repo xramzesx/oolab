@@ -12,22 +12,21 @@ public class GrassField extends AbstractWorldMap {
     private final ArrayList<Grass> grasses =  new ArrayList<>();
     private final int fieldCount;
 
-    private Vector2d startGrassBorder;
-    private Vector2d endGrassBorder;
+    private final Vector2d startGrassBorder;
+    private final Vector2d endGrassBorder;
 
     public GrassField( int grassField, ArrayList<Grass> grasses ) {
         this(grassField);
         this.grasses.clear();
 
-        for ( Grass grass: grasses )
-            this.grasses.add(grass);
+        this.grasses.addAll(grasses);
     }
 
-    public GrassField(int grassFieldCount ) {
+    public GrassField( int grassFieldCount ) {
         this.startBorder = new Vector2d(0,0);
         this.fieldCount = grassFieldCount;
 
-        this.openMap();
+        this.resetBorders();
 
         this.startGrassBorder = new Vector2d(0,0);
         this.endGrassBorder = new Vector2d(
@@ -75,7 +74,7 @@ public class GrassField extends AbstractWorldMap {
         return null;
     }
 
-    protected void fitMap () {
+    protected void prepareBorders () {
         Vector2d endBorder, startBorder;
         if ( this.grasses.size() > 0)
             endBorder = this.grasses.get(0).getPosition();
@@ -103,7 +102,7 @@ public class GrassField extends AbstractWorldMap {
         this.endBorder = endBorder;
     }
 
-    protected void openMap() {
+    protected void resetBorders() {
         this.startBorder= new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
         this.endBorder = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
     }

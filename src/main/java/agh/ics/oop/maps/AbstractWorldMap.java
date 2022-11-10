@@ -48,17 +48,17 @@ abstract public class AbstractWorldMap implements IWorldMap {
         return null;
     }
 
-    abstract protected void openMap();
-    abstract protected void fitMap();
+    abstract protected void resetBorders();
+    abstract protected void prepareBorders();
 
     abstract public int getPoint(Vector2d position);
 
     @Override
     public String toString() {
-        this.fitMap();
+        this.prepareBorders();
         MapVisualizer visualizer = new MapVisualizer(this);
         String result = visualizer.draw(startBorder, endBorder);
-        this.openMap();
+        this.resetBorders();
 
         return result;
     }
