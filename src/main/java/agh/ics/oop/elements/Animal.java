@@ -3,7 +3,10 @@ package agh.ics.oop.elements;
 import agh.ics.oop.Vector2d;
 import agh.ics.oop.enums.MapDirection;
 import agh.ics.oop.enums.MoveDirection;
+import agh.ics.oop.interfaces.IPositionChangeObserver;
 import agh.ics.oop.interfaces.IWorldMap;
+
+import java.util.ArrayList;
 
 public class Animal extends AbstractWorldMapElement {
     private IWorldMap map;
@@ -38,6 +41,7 @@ public class Animal extends AbstractWorldMapElement {
         return position;
     }
 
+
     public void move(MoveDirection direction) {
         switch (direction) {
             case LEFT -> this.orientation = this.orientation.previous();
@@ -48,6 +52,7 @@ public class Animal extends AbstractWorldMapElement {
                         : this.position.subtract(this.orientation.toUnitVector());
                 if (this.map.canMoveTo(position)) {
                     this.points += this.map.getPoint( position );
+                    this.positionChanged(this.position, position);
                     this.position = position;
                 }
             }

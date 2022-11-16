@@ -1,11 +1,13 @@
 package agh.ics.oop.maps;
 
+import agh.ics.oop.elements.AbstractWorldMapElement;
 import agh.ics.oop.elements.Animal;
 import agh.ics.oop.elements.Grass;
 import agh.ics.oop.utilities.Utils;
 import agh.ics.oop.Vector2d;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class GrassField extends AbstractWorldMap {
 
@@ -17,9 +19,11 @@ public class GrassField extends AbstractWorldMap {
 
     public GrassField( int grassField, ArrayList<Grass> grasses ) {
         this(grassField);
-        this.grasses.clear();
 
-        this.grasses.addAll(grasses);
+        this.mapElements.clear();
+        for ( Grass grass : grasses ) {
+            this.mapElements.put(grass.getPosition(), grass);
+        }
     }
 
     public GrassField( int grassFieldCount ) {
@@ -31,7 +35,7 @@ public class GrassField extends AbstractWorldMap {
         this.startGrassBorder = new Vector2d(0,0);
         this.endGrassBorder = new Vector2d(
                 (int) Math.sqrt(10 * this.fieldCount),
-                (int) Math.sqrt(10 * this. fieldCount)
+                (int) Math.sqrt(10 * this.fieldCount)
         );
 
         this.generateRandomGrasses();
@@ -48,8 +52,7 @@ public class GrassField extends AbstractWorldMap {
             );
         } while ( this.objectAt(position) instanceof Grass || isOccupied(position) );
 
-        this.grasses.add( new Grass(position));
-
+        this.mapElements.put(position, new Grass(position));
     }
     private void generateRandomGrasses () {
         this.grasses.clear();
@@ -59,43 +62,31 @@ public class GrassField extends AbstractWorldMap {
         }
     }
 
-    @Override
-    public Object objectAt(Vector2d position) {
-        Animal animal = (Animal) super.objectAt(position);
-
-        if ( animal != null )
-            return animal;
-
-        for ( Grass grass: this.grasses ) {
-            if ( grass.getPosition().equals( position ) )
-                return grass;
-        }
-
-        return null;
-    }
-
     protected void prepareBorders () {
         Vector2d endBorder, startBorder;
-        if ( this.grasses.size() > 0)
-            endBorder = this.grasses.get(0).getPosition();
-        else if ( this.animals.size() > 0 )
-            endBorder = this.animals.get(0).getPosition();
-        else {
-            this.startBorder = new Vector2d(0,0);
+
+        Map.Entry<
+            Vector2d,
+            AbstractWorldMapElement
+        > entry = this.mapElements
+            .entrySet()
+            .iterator()
+            .next();
+
+        if ( entry == null ) {
             this.endBorder = new Vector2d(0,0);
+            this.startBorder = new Vector2d(0,0);
             return;
         }
 
-        startBorder = new Vector2d(endBorder.x, endBorder.y);
+        endBorder = entry.getValue().getPosition();
+        startBorder = entry.getValue().getPosition();
 
-        for ( Animal animal: this.animals ) {
-            startBorder = startBorder.lowerLeft(animal.getPosition());
-            endBorder = endBorder.upperRight(animal.getPosition());
-        }
+        for ( Map.Entry<Vector2d, AbstractWorldMapElement > set : this.mapElements.entrySet() ) {
+            AbstractWorldMapElement mapElement = set.getValue();
 
-        for ( Grass grass: this.grasses ) {
-            startBorder = startBorder.lowerLeft(grass.getPosition());
-            endBorder = endBorder.upperRight(grass.getPosition());
+            startBorder = startBorder.lowerLeft( mapElement.getPosition() );
+            endBorder = endBorder.upperRight( mapElement.getPosition() );
         }
 
         this.startBorder = startBorder;
@@ -112,7 +103,10 @@ public class GrassField extends AbstractWorldMap {
         Object object = this.objectAt(position);
 
         if ( object instanceof Grass ) {
-            this.grasses.remove(object);
+            positionChanged(
+                ((Grass) object).getPosition(),
+                null
+            );
             this.generateRandomGrass();
             return 1;
         } else {

@@ -25,3 +25,7 @@ Dodatkowo, podczas tworzenia nowego zwierzęcia, potrzebaby było
 zaimplementować mechanizm wyszukujący najbliższego wolnego miejsca,
 np. wykorzystujący BFS.
 ```
+
+ - [x] [`lab4`](https://github.com/xramzesx/oolab/releases/tag/lab4) - add `RectangularMap`, `SimulationEngine` and integration tests
+ - [x] [`lab5`](https://github.com/xramzesx/oolab/releases/tag/lab5) - add Grass, GUI and Abstract classess
+ - [x] [`lab6`](https://github.com/xramzesx/oolab/releases/tag/lab6) - add `Observer` programming pattern

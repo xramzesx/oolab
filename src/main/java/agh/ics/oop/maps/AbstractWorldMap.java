@@ -1,22 +1,21 @@
 package agh.ics.oop.maps;
 
+import agh.ics.oop.elements.AbstractWorldMapElement;
 import agh.ics.oop.elements.Animal;
+import agh.ics.oop.interfaces.IMapElement;
+import agh.ics.oop.interfaces.IPositionChangeObserver;
 import agh.ics.oop.utilities.MapVisualizer;
 import agh.ics.oop.Vector2d;
 import agh.ics.oop.interfaces.IWorldMap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-abstract public class AbstractWorldMap implements IWorldMap {
-    protected final ArrayList<Animal> animals = new ArrayList<>();
+abstract public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
+    protected HashMap< Vector2d, AbstractWorldMapElement > mapElements = new HashMap<>();
 
     protected Vector2d startBorder = new Vector2d(0,0);
     protected Vector2d endBorder;
-
-    public Animal getAnimal(int index) {
-        return animals.get(index);
-    }
-
 
     @Override
     public boolean canMoveTo(Vector2d position) {
@@ -27,7 +26,8 @@ abstract public class AbstractWorldMap implements IWorldMap {
     @Override
     public boolean place(Animal animal) {
         if (canMoveTo(animal.getPosition())) {
-            this.animals.add(animal);
+            this.mapElements.put(animal.getPosition(), animal);
+            animal.addObserver(this::positionChanged);
             return true;
         }
         return false;
@@ -40,12 +40,7 @@ abstract public class AbstractWorldMap implements IWorldMap {
 
     @Override
     public Object objectAt(Vector2d position) {
-        for (Animal animal: this.animals ){
-            if (animal.isAt(position))
-                return animal;
-        }
-
-        return null;
+        return this.mapElements.get(position);
     }
 
     abstract protected void resetBorders();
@@ -61,5 +56,23 @@ abstract public class AbstractWorldMap implements IWorldMap {
         this.resetBorders();
 
         return result;
+    }
+
+    @Override
+    public boolean positionChanged(Vector2d oldPosition, Vector2d newPosition) {
+        if (newPosition == null) {
+            this.mapElements.remove(oldPosition);
+            return true;
+        }
+
+        if (canMoveTo(newPosition)) {
+            AbstractWorldMapElement mapElement = (AbstractWorldMapElement) objectAt(oldPosition);
+            this.mapElements.put(newPosition, mapElement);
+            this.mapElements.remove(oldPosition);
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }
