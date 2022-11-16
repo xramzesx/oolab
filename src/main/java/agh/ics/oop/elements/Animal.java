@@ -5,7 +5,7 @@ import agh.ics.oop.enums.MapDirection;
 import agh.ics.oop.enums.MoveDirection;
 import agh.ics.oop.interfaces.IWorldMap;
 
-public class Animal extends AbstactWorldMapElement {
+public class Animal extends AbstractWorldMapElement {
     private IWorldMap map;
     public int points = 0;
 
