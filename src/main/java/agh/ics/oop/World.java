@@ -2,11 +2,13 @@ package agh.ics.oop;
 import agh.ics.oop.elements.Animal;
 import agh.ics.oop.enums.Direction;
 import agh.ics.oop.enums.MoveDirection;
+import agh.ics.oop.gui.App;
 import agh.ics.oop.interfaces.IEngine;
 import agh.ics.oop.interfaces.IWorldMap;
 import agh.ics.oop.maps.GrassField;
 import agh.ics.oop.maps.RectangularMap;
 import agh.ics.oop.utilities.OptionsParser;
+import javafx.application.Application;
 
 import java.util.Arrays;
 
@@ -15,6 +17,7 @@ import static java.lang.System.out;
 public class World {
 
     public static void main ( String[] args ) {
+        Application.launch(App.class, args);
         try {
             /// FROM PREVIOUS LABS (UP TO 3RD) ///
             Animal animal = new Animal( new RectangularMap(5,5) );
