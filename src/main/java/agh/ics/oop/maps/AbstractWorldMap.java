@@ -24,13 +24,18 @@ abstract public class AbstractWorldMap implements IWorldMap, IPositionChangeObse
                 && !(objectAt(position) instanceof Animal);
     }
     @Override
-    public boolean place(Animal animal) {
+    public boolean place(Animal animal) throws IllegalArgumentException {
         if (canMoveTo(animal.getPosition())) {
             this.mapElements.put(animal.getPosition(), animal);
             animal.addObserver(this::positionChanged);
             return true;
+        } else {
+            throw new IllegalArgumentException(
+                "Cannot place animal at: " +
+                animal.getPosition() +
+                ". Field is currently busy"
+            );
         }
-        return false;
     }
 
     @Override

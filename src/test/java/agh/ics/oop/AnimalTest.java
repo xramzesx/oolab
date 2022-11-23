@@ -50,17 +50,39 @@ public class AnimalTest {
     }
 
     @Test
+    void animalParseLimitRotateExceptionTest() {
+        IWorldMap map = new RectangularMap(5, 5);
+        Animal animal = new Animal(map);
+
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> {
+                World.run(
+                    OptionsParser.parse(
+                        new String[]{
+                            "f", "f", "f", "f", "f", "r", "b", "b", "b", "b",
+                            "r", "b", "r", "b",
+                            "right", "ri", "b", "backward", "left",
+                            "forward", "forw", "asd", "dasd", "bababab",
+                            "", "f", "f", "f", "left", "f"
+                        }),
+                    animal
+                );
+            }
+        );
+    }
+
+    @Test
     void animalParseLimitRotateTest() {
         IWorldMap map = new RectangularMap(5, 5);
         Animal animal = new Animal(map);
 
-        World.run(OptionsParser.parse(
+        World.run( OptionsParser.parse(
             new String[]{
                 "f", "f", "f", "f", "f", "r", "b", "b", "b", "b",
                 "r", "b", "r", "b",
-                "right", "ri", "b", "backward", "left",
-                "forward", "forw", "asd", "dasd", "bababab",
-                "", "f", "f", "f", "left", "f"
+                "right", "b", "backward", "left",
+                "forward", "f", "f", "f", "left", "f"
             }),
             animal
         );
@@ -68,6 +90,5 @@ public class AnimalTest {
         /// PARSE, ROTATE AND PASSING THE LIMIT ///
         assertEquals("v", animal.toString());
         assert( animal.isAt(new Vector2d(0, 1)) );
-        World.printLine();
     }
 }

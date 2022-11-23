@@ -15,41 +15,48 @@ import static java.lang.System.out;
 public class World {
 
     public static void main ( String[] args ) {
+        try {
+            /// FROM PREVIOUS LABS (UP TO 3RD) ///
+            Animal animal = new Animal( new RectangularMap(5,5) );
+            MoveDirection[] requests = OptionsParser.parse(args);
+            out.println("\nsystem wystartowal");
 
-        /// FROM PREVIOUS LABS (UP TO 3RD) ///
-        Animal animal = new Animal( new RectangularMap(5,5) );
-        MoveDirection[] requests = OptionsParser.parse(args);
-        out.println("\nsystem wystartowal");
+            printLine();
+            run(requests, animal);
 
-        printLine();
-        run(requests, animal);
+            printLine();
+            out.println("Komunikaty: " + String.join(
+                    ",",
+                    Arrays
+                            .stream(args)
+                            .filter(
+                                    direction -> MoveDirection.toEnum(direction) != MoveDirection.NONE)
+                            .toArray(String[]::new)
+            ));
 
-        printLine();
-        out.println("Komunikaty: " + String.join(
-                ",",
-                Arrays
-                        .stream(args)
-                        .filter(
-                                direction -> MoveDirection.toEnum(direction) != MoveDirection.NONE)
-                        .toArray(String[]::new)
-        ));
+            printLine();
+            out.println("Pozycja końcowa: " + animal);
 
-        printLine();
-        out.println("Pozycja końcowa: " + animal);
+            printLine();
+            out.println("system zakonczyl dzialanie");
 
-        printLine();
-        out.println("system zakonczyl dzialanie");
+            /// CURRENT LABS (FROM 4TH) ///
 
-        /// CURRENT LABS (FROM 4TH) ///
+            MoveDirection[] directions = OptionsParser.parse(args);
+            IWorldMap map = new GrassField(10);
+            Vector2d[] positions = { new Vector2d(2,2),new Vector2d(2,2), new Vector2d(3,4) };
+            IEngine engine = new SimulationEngine(directions, map, positions, true);
 
-        MoveDirection[] directions = OptionsParser.parse(args);
-        IWorldMap map = new GrassField(10);
-        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
-        IEngine engine = new SimulationEngine(directions, map, positions, true);
+            out.println(engine);
+            engine.run();
+            out.println(engine);
 
-        out.println(engine);
-        engine.run();
-        out.println(engine);
+        } catch (IllegalArgumentException e) {
+            printLine();
+            out.println("\nIllegal argument: " + e.getMessage() + "\n" );
+            printLine();
+        }
+
     }
 
     public static void run (MoveDirection[] requests, Animal animal) {
@@ -63,8 +70,7 @@ public class World {
                 case BACKWARD -> out.println("Zwierzak idzie do tyłu");
                 case RIGHT -> out.println("Zwierzak skręca w prawo");
                 case LEFT -> out.println("Zwierzak skręca w lewo");
-                default -> {
-                }
+                default -> {}
             }
         }
 

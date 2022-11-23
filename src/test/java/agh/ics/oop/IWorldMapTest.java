@@ -33,7 +33,7 @@ public class IWorldMapTest {
         Animal animalRec2 = new Animal(grassMap, new Vector2d(100,100));
 
         assert ( grassMap.place(animalGrass2) );
-        assert (! recMap.place(animalRec2) );
+        assertThrows( IllegalArgumentException.class, () -> recMap.place(animalRec2) );
     }
 
     @Test
@@ -166,48 +166,44 @@ public class IWorldMapTest {
 
     @Test
     void integrationRectTest() {
-// data
+        // data
         String[] args = {
-                "r","b","l","f","r","r","b","f","l","b","f",
-                "b","l","b","l","b","f","f","f","r","l","r",
-                "b","f","f","f","r","f","f","l","r","f","b",
-                "b","l","f","b","b","b","l","f","b","f","b",
-                "f","l","b","f","b","r","l","l","f","b","b",
-                "r","r","l","r","f","l","l","f","b","f","b",
-                "l","f","b","l","f","f","f","b","l","f","l",
-                "b","r","f","f","f","f","b","b","b","l","b",
-                "l","f","b","l","b","b","b","f","b","f","b",
-                "b","l","f","b","b","b","l","f","b","f","b",
-                "f","l","b","f","b","r","l","l","f","b","b",
-                "r","r","l","r","f","l","l","f","b","f","b",
-                "l","f","b","l","f","f","f","b","l","f","l",
-                "b","r","f","f","f","f","b","b","b","l","b",
-                "f","l","b","f","b","r","l","l","f","b","b",
-                "r","r","l","r","f","l","l","f","b","f","b",
-                "l","f","b","l","f","f","f","b","l","f","l",
-                "r","b","l","f","r","r","b","f","l","b","f",
-                "b","l","b","l","b","f","f","f","r","l","r",
-                "b","f","f","f","r","f","f","l","r","f","b",
-                "b","l","f","b","b","b","l","f","b","f","b",
-                "b","l","b","l","b","f","f","f","r","l","r",
-                "b","f","f","f","r","f","f","l","r","f","b",
-                "b","r","f","f","f","f","b","b","b","l","b",
-                "l","f","b","l","b","b","b","f","b","f","b",
-                "r","b","l","f","r","r","b","f","l","b","f",
-                "l","f","b","l","b","b","b","f","b","f","b",
+            "r","b","l","f","r","r","b","f","l","b","f",
+            "b","l","b","l","b","f","f","f","r","l","r",
+            "b","f","f","f","r","f","f","l","r","f","b",
+            "b","l","f","b","b","b","l","f","b","f","b",
+            "f","l","b","f","b","r","l","l","f","b","b",
+            "r","r","l","r","f","l","l","f","b","f","b",
+            "l","f","b","l","f","f","f","b","l","f","l",
+            "b","r","f","f","f","f","b","b","b","l","b",
+            "l","f","b","l","b","b","b","f","b","f","b",
+            "b","l","f","b","b","b","l","f","b","f","b",
+            "f","l","b","f","b","r","l","l","f","b","b",
+            "r","r","l","r","f","l","l","f","b","f","b",
+            "l","f","b","l","f","f","f","b","l","f","l",
+            "b","r","f","f","f","f","b","b","b","l","b",
+            "f","l","b","f","b","r","l","l","f","b","b",
+            "r","r","l","r","f","l","l","f","b","f","b",
+            "l","f","b","l","f","f","f","b","l","f","l",
+            "r","b","l","f","r","r","b","f","l","b","f",
+            "b","l","b","l","b","f","f","f","r","l","r",
+            "b","f","f","f","r","f","f","l","r","f","b",
+            "b","l","f","b","b","b","l","f","b","f","b",
+            "b","l","b","l","b","f","f","f","r","l","r",
+            "b","f","f","f","r","f","f","l","r","f","b",
+            "b","r","f","f","f","f","b","b","b","l","b",
+            "l","f","b","l","b","b","b","f","b","f","b",
+            "r","b","l","f","r","r","b","f","l","b","f",
+            "l","f","b","l","b","b","b","f","b","f","b",
         };
 
         // prepare
         MoveDirection[] directions = OptionsParser.parse(args);
         IWorldMap map = new RectangularMap(10, 10);
         Vector2d[] positions = {
-                new Vector2d(2,2),
-                new Vector2d(3,4),
-                new Vector2d(3,4),
-                new Vector2d(6,6),
-                new Vector2d(6,6),
-                new Vector2d(6,6),
-                new Vector2d(6,6)
+            new Vector2d(2,2),
+            new Vector2d(3,4),
+            new Vector2d(6,6)
         };
         SimulationEngine engine = new SimulationEngine(directions, map, positions);
         engine.run();
@@ -216,6 +212,57 @@ public class IWorldMapTest {
         assertEquals(new Vector2d(1,2), engine.getAnimals().get(0).getPosition());
         assertEquals(new Vector2d(3,8), engine.getAnimals().get(1).getPosition());
         assertEquals(new Vector2d(9,9), engine.getAnimals().get(2).getPosition());
+    }
+
+    @Test
+    void integrationRectExceptionTest() {
+        // data
+        String[] args = {
+            "r","b","l","f","r","r","b","f","l","b","f",
+            "b","l","b","l","b","f","f","f","r","l","r",
+            "b","f","f","f","r","f","f","l","r","f","b",
+            "b","l","f","b","b","b","l","f","b","f","b",
+            "f","l","b","f","b","r","l","l","f","b","b",
+            "r","r","l","r","f","l","l","f","b","f","b",
+            "l","f","b","l","f","f","f","b","l","f","l",
+            "b","r","f","f","f","f","b","b","b","l","b",
+            "l","f","b","l","b","b","b","f","b","f","b",
+            "b","l","f","b","b","b","l","f","b","f","b",
+            "f","l","b","f","b","r","l","l","f","b","b",
+            "r","r","l","r","f","l","l","f","b","f","b",
+            "l","f","b","l","f","f","f","b","l","f","l",
+            "b","r","f","f","f","f","b","b","b","l","b",
+            "f","l","b","f","b","r","l","l","f","b","b",
+            "r","r","l","r","f","l","l","f","b","f","b",
+            "l","f","b","l","f","f","f","b","l","f","l",
+            "r","b","l","f","r","r","b","f","l","b","f",
+            "b","l","b","l","b","f","f","f","r","l","r",
+            "b","f","f","f","r","f","f","l","r","f","b",
+            "b","l","f","b","b","b","l","f","b","f","b",
+            "b","l","b","l","b","f","f","f","r","l","r",
+            "b","f","f","f","r","f","f","l","r","f","b",
+            "b","r","f","f","f","f","b","b","b","l","b",
+            "l","f","b","l","b","b","b","f","b","f","b",
+            "r","b","l","f","r","r","b","f","l","b","f",
+            "l","f","b","l","b","b","b","f","b","f","b",
+        };
+
+        // prepare
+        assertThrows(IllegalArgumentException.class, () -> {
+            MoveDirection[] directions = OptionsParser.parse(args);
+            IWorldMap map = new RectangularMap(10, 10);
+            Vector2d[] positions = {
+                    new Vector2d(2,2),
+                    new Vector2d(3,4),
+                    new Vector2d(3,4),
+                    new Vector2d(6,6),
+                    new Vector2d(6,6),
+                    new Vector2d(6,6),
+                    new Vector2d(6,6)
+            };
+            SimulationEngine engine = new SimulationEngine(directions, map, positions);
+            engine.run();
+        });
     }
 
     @Test
@@ -257,10 +304,6 @@ public class IWorldMapTest {
         Vector2d[] positions = {
                 new Vector2d(2,2),
                 new Vector2d(3,4),
-                new Vector2d(3,4),
-                new Vector2d(6,6),
-                new Vector2d(6,6),
-                new Vector2d(6,6),
                 new Vector2d(6,6)
         };
         SimulationEngine engine = new SimulationEngine(directions, map, positions);
@@ -270,5 +313,57 @@ public class IWorldMapTest {
         assertEquals(new Vector2d(1,-1), engine.getAnimals().get(0).getPosition());
         assertEquals(new Vector2d(3,8), engine.getAnimals().get(1).getPosition());
         assertEquals(new Vector2d(13,9), engine.getAnimals().get(2).getPosition());
+    }
+    @Test
+    void integrationGrassExceptionTest() {
+        // data
+        String[] args = {
+            "r","b","l","f","r","r","b","f","l","b","f",
+            "b","l","b","l","b","f","f","f","r","l","r",
+            "b","f","f","f","r","f","f","l","r","f","b",
+            "b","l","f","b","b","b","l","f","b","f","b",
+            "f","l","b","f","b","r","l","l","f","b","b",
+            "r","r","l","r","f","l","l","f","b","f","b",
+            "l","f","b","l","f","f","f","b","l","f","l",
+            "b","r","f","f","f","f","b","b","b","l","b",
+            "l","f","b","l","b","b","b","f","b","f","b",
+            "b","l","f","b","b","b","l","f","b","f","b",
+            "f","l","b","f","b","r","l","l","f","b","b",
+            "r","r","l","r","f","l","l","f","b","f","b",
+            "l","f","b","l","f","f","f","b","l","f","l",
+            "b","r","f","f","f","f","b","b","b","l","b",
+            "f","l","b","f","b","r","l","l","f","b","b",
+            "r","r","l","r","f","l","l","f","b","f","b",
+            "l","f","b","l","f","f","f","b","l","f","l",
+            "r","b","l","f","r","r","b","f","l","b","f",
+            "b","l","b","l","b","f","f","f","r","l","r",
+            "b","f","f","f","r","f","f","l","r","f","b",
+            "b","l","f","b","b","b","l","f","b","f","b",
+            "b","l","b","l","b","f","f","f","r","l","r",
+            "b","f","f","f","r","f","f","l","r","f","b",
+            "b","r","f","f","f","f","b","b","b","l","b",
+            "l","f","b","l","b","b","b","f","b","f","b",
+            "r","b","l","f","r","r","b","f","l","b","f",
+            "l","f","b","l","b","b","b","f","b","f","b",
+        };
+
+        // prepare
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            MoveDirection[] directions = OptionsParser.parse(args);
+            IWorldMap map = new GrassField(10);
+            Vector2d[] positions = {
+                    new Vector2d(2,2),
+                    new Vector2d(3,4),
+                    new Vector2d(3,4),
+                    new Vector2d(6,6),
+                    new Vector2d(6,6),
+                    new Vector2d(6,6),
+                    new Vector2d(6,6)
+            };
+            SimulationEngine engine = new SimulationEngine(directions, map, positions);
+            engine.run();
+        });
+
     }
 }
