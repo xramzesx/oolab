@@ -33,14 +33,9 @@ public class Animal extends AbstractWorldMapElement {
         };
     }
 
-    public boolean isAt( Vector2d position ){
-        return this.position.equals( position );
-    }
-
     public Vector2d getPosition() {
         return position;
     }
-
 
     public void move(MoveDirection direction) {
         switch (direction) {

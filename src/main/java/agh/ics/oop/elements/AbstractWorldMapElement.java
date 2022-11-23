@@ -11,7 +11,7 @@ abstract public class AbstractWorldMapElement implements IMapElement {
     protected Vector2d position;
     private final ArrayList<IPositionChangeObserver> observers = new ArrayList<>();
 
-    public boolean isAt( Vector2d position ){
+    public boolean isAt ( Vector2d position ) {
         return this.position.equals( position );
     }
 
@@ -21,9 +21,11 @@ abstract public class AbstractWorldMapElement implements IMapElement {
 
     public void addObserver(IPositionChangeObserver observer) {
         observers.add( observer );
+        observer.positionChanged(this.position, this.position);
     }
 
     public void removeObserver(IPositionChangeObserver observer) {
+        observer.positionChanged( this.position, null );
         observers.remove( observer );
     }
 

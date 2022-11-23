@@ -11,6 +11,14 @@ public class Vector2d {
         this.y = y;
     }
 
+    public static Vector2d lowerLeft ( Vector2d first, Vector2d second ) {
+        return first.lowerLeft(second);
+    }
+
+    public static Vector2d upperRight ( Vector2d first, Vector2d second ) {
+        return first.upperRight(second);
+    }
+
     public boolean precedes( Vector2d other ) {
         return this.x <= other.x && this.y <= other.y;
     }
@@ -28,29 +36,29 @@ public class Vector2d {
 
     public Vector2d subtract(Vector2d other) {
         return new Vector2d(
-                this.x - other.x,
-                this.y - other.y
+            this.x - other.x,
+            this.y - other.y
         );
     }
 
     public Vector2d upperRight(Vector2d other) {
         return new Vector2d(
-                Math.max(this.x, other.x),
-                Math.max(this.y, other.y)
+            Math.max(this.x, other.x),
+            Math.max(this.y, other.y)
         );
     }
 
     public Vector2d lowerLeft(Vector2d other) {
         return new Vector2d(
-                Math.min(this.x, other.x),
-                Math.min(this.y, other.y)
+            Math.min(this.x, other.x),
+            Math.min(this.y, other.y)
         );
     }
 
     public Vector2d opposite() {
         return new Vector2d(
-                -this.x,
-                -this.y
+            -this.x,
+            -this.y
         );
     }
 

@@ -23,6 +23,7 @@ public class GrassField extends AbstractWorldMap {
         this.mapElements.clear();
         for ( Grass grass : grasses ) {
             this.mapElements.put(grass.getPosition(), grass);
+            grass.addObserver(this.mapBoundary);
         }
     }
 
@@ -38,7 +39,7 @@ public class GrassField extends AbstractWorldMap {
                 (int) Math.sqrt(10 * this.fieldCount)
         );
 
-        this.generateRandomGrasses();
+        this.generateGrass();
 
     }
 
@@ -52,9 +53,11 @@ public class GrassField extends AbstractWorldMap {
             );
         } while ( this.objectAt(position) instanceof Grass || isOccupied(position) );
 
-        this.mapElements.put(position, new Grass(position));
+        Grass grass = new Grass(position);
+        this.mapElements.put(position, grass);
+        grass.addObserver(this.mapBoundary);
     }
-    private void generateRandomGrasses () {
+    private void generateGrass () {
         this.grasses.clear();
 
         for (int i = 0; i < this.fieldCount; i++ ) {
@@ -63,34 +66,8 @@ public class GrassField extends AbstractWorldMap {
     }
 
     protected void prepareBorders () {
-        Vector2d endBorder, startBorder;
-
-        Map.Entry<
-            Vector2d,
-            AbstractWorldMapElement
-        > entry = this.mapElements
-            .entrySet()
-            .iterator()
-            .next();
-
-        if ( entry == null ) {
-            this.endBorder = new Vector2d(0,0);
-            this.startBorder = new Vector2d(0,0);
-            return;
-        }
-
-        endBorder = entry.getValue().getPosition();
-        startBorder = entry.getValue().getPosition();
-
-        for ( Map.Entry<Vector2d, AbstractWorldMapElement > set : this.mapElements.entrySet() ) {
-            AbstractWorldMapElement mapElement = set.getValue();
-
-            startBorder = startBorder.lowerLeft( mapElement.getPosition() );
-            endBorder = endBorder.upperRight( mapElement.getPosition() );
-        }
-
-        this.startBorder = startBorder;
-        this.endBorder = endBorder;
+        this.startBorder = this.mapBoundary.lowerLeft();
+        this.endBorder = this.mapBoundary.upperRight();
     }
 
     protected void resetBorders() {

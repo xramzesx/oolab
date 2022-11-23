@@ -1,5 +1,6 @@
 package agh.ics.oop.maps;
 
+import agh.ics.oop.MapBoundary;
 import agh.ics.oop.elements.AbstractWorldMapElement;
 import agh.ics.oop.elements.Animal;
 import agh.ics.oop.interfaces.IMapElement;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 abstract public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
+    protected MapBoundary mapBoundary = new MapBoundary();
+
     protected HashMap< Vector2d, AbstractWorldMapElement > mapElements = new HashMap<>();
 
     protected Vector2d startBorder = new Vector2d(0,0);
@@ -28,6 +31,7 @@ abstract public class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         if (canMoveTo(animal.getPosition())) {
             this.mapElements.put(animal.getPosition(), animal);
             animal.addObserver(this::positionChanged);
+            animal.addObserver(this.mapBoundary);
             return true;
         } else {
             throw new IllegalArgumentException(
@@ -73,7 +77,8 @@ abstract public class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         if (canMoveTo(newPosition)) {
             AbstractWorldMapElement mapElement = (AbstractWorldMapElement) objectAt(oldPosition);
             this.mapElements.put(newPosition, mapElement);
-            this.mapElements.remove(oldPosition);
+            if ( oldPosition != null)
+                this.mapElements.remove(oldPosition);
             return true;
         } else {
             return false;
