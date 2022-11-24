@@ -12,7 +12,10 @@ abstract public class AbstractWorldMapElement implements IMapElement {
     private final ArrayList<IPositionChangeObserver> observers = new ArrayList<>();
 
     public boolean isAt ( Vector2d position ) {
-        return this.position.equals( position );
+        if (this.position != null)
+            return this.position.equals( position );
+        else
+            return position == null;
     }
 
     public Vector2d getPosition() {

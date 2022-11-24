@@ -15,7 +15,7 @@ public class AnimalTest {
 
         /// BASE POSITION ///
         assertEquals("^", animal.toString());
-        assert(animal.isAt(new Vector2d(2,2)));
+        assert(animal.getPosition().equals(new Vector2d(2,2)));
     }
 
     @Test
@@ -27,7 +27,7 @@ public class AnimalTest {
 
         /// PASSING THE LIMIT ///
         assertEquals("^", animal.toString());
-        assert(animal.isAt(new Vector2d(2,4)));
+        assert(animal.getPosition().equals(new Vector2d(2,4)));
         World.printLine();
     }
 
@@ -39,13 +39,13 @@ public class AnimalTest {
 
         /// ROTATE AND PASSING THE LIMIT ///
         assertEquals(">", animal.toString());
-        assert( animal.isAt(new Vector2d(0, 4)) );
+        assert( animal.getPosition().equals(new Vector2d(0, 4)) );
 
         World.printLine();
         World.run( OptionsParser.parse(new String[]{ "r", "b", "r", "b" }), animal );
 
         assertEquals("<", animal.toString());
-        assert( animal.isAt(new Vector2d(1, 4)) );
+        assert( animal.getPosition().equals(new Vector2d(1, 4)) );
         World.printLine();
     }
 
@@ -89,6 +89,6 @@ public class AnimalTest {
 
         /// PARSE, ROTATE AND PASSING THE LIMIT ///
         assertEquals("v", animal.toString());
-        assert( animal.isAt(new Vector2d(0, 1)) );
+        assert( animal.getPosition().equals(new Vector2d(0, 1)) );
     }
 }

@@ -5,19 +5,20 @@ import agh.ics.oop.Vector2d;
 import agh.ics.oop.elements.AbstractWorldMapElement;
 import agh.ics.oop.enums.MoveDirection;
 import agh.ics.oop.interfaces.IEngine;
-import agh.ics.oop.interfaces.IMapElement;
 import agh.ics.oop.interfaces.IWorldMap;
 import agh.ics.oop.maps.GrassField;
 import agh.ics.oop.utilities.OptionsParser;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
+
+import static java.lang.System.out;
 
 
 public class App extends Application {
@@ -32,33 +33,39 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        MoveDirection[] directions = OptionsParser
-            .parse(
-                getParameters()
-                    .getRaw()
-                    .toArray(new String[0])
+        try {
+            MoveDirection[] directions = OptionsParser
+                .parse(
+                    getParameters()
+                        .getRaw()
+                        .toArray(new String[0])
+                );
+
+            this.map = new GrassField(10);
+
+            Vector2d[] positions = { new Vector2d(2, 2), new Vector2d(3, 4)};
+
+            this.engine = new SimulationEngine(directions, this.map, positions);
+            this.engine.run();
+
+            Scene scene = new Scene(
+                    draw(
+                            this.map.getLowerLeft(),
+                            this.map.getUpperRight()
+                    ),
+                    windowWidth,
+                    windowHeight
             );
 
-        this.map = new GrassField(10);
+            System.out.println(this.engine);
 
-        Vector2d[] positions = { new Vector2d(2, 2), new Vector2d(3, 4)};
-
-        this.engine = new SimulationEngine(directions, this.map, positions);
-        this.engine.run();
-
-        Scene scene = new Scene(
-            draw(
-                this.map.getLowerLeft(),
-                this.map.getUpperRight()
-            ),
-            windowWidth,
-            windowHeight
-        );
-
-        System.out.println(this.engine);
-
-        primaryStage.setScene(scene);
-        primaryStage.show();
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IllegalArgumentException e) {
+            out.println("\nIllegal argument: " + e.getMessage() + "\n" );
+            primaryStage.close();
+            Platform.exit();
+        }
     }
 
     public GridPane draw(Vector2d lowerLeft, Vector2d upperRight) {
