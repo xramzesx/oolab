@@ -50,4 +50,16 @@ public interface IWorldMap {
     Object objectAt(Vector2d position);
 
     int getPoint(Vector2d position);
+
+    /**
+     * Get lower left corner boundary
+     * @return lower left vector of IMapElement
+     */
+    Vector2d getLowerLeft();
+
+    /**
+     * Get upper right corner boundary
+     * @return upper right vector of IMapElement
+     */
+    Vector2d getUpperRight();
 }

@@ -58,7 +58,7 @@ public class SimulationEngine implements IEngine {
         this.frame.dispose();
     }
 
-    SimulationEngine(
+    public SimulationEngine(
             MoveDirection[] directions,
             IWorldMap map,
             Vector2d[] positions

@@ -83,6 +83,15 @@ abstract public class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         } else {
             return false;
         }
+    }
 
+    @Override
+    public Vector2d getLowerLeft() {
+        return this.mapBoundary.lowerLeft();
+    }
+
+    @Override
+    public Vector2d getUpperRight() {
+        return this.mapBoundary.upperRight();
     }
 }
