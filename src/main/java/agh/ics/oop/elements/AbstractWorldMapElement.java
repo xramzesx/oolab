@@ -7,6 +7,7 @@ import agh.ics.oop.interfaces.IPositionChangeObserver;
 import java.util.ArrayList;
 
 abstract public class AbstractWorldMapElement implements IMapElement {
+    public static String resourcePrefix = "src/main/resources/";
 
     protected Vector2d position;
     private final ArrayList<IPositionChangeObserver> observers = new ArrayList<>();

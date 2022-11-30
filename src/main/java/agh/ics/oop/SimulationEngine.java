@@ -3,6 +3,7 @@ package agh.ics.oop;
 import agh.ics.oop.elements.Animal;
 import agh.ics.oop.enums.MoveDirection;
 import agh.ics.oop.interfaces.IEngine;
+import agh.ics.oop.interfaces.IPositionChangeObserver;
 import agh.ics.oop.interfaces.IWorldMap;
 
 import java.awt.*;
@@ -10,8 +11,9 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-public class SimulationEngine implements IEngine {
+public class SimulationEngine implements IEngine, Runnable {
 
+    private IPositionChangeObserver observer;
     private final IWorldMap map;
     private final ArrayList<Animal> animals = new ArrayList<>();
     private final MoveDirection[] directions;
@@ -61,6 +63,16 @@ public class SimulationEngine implements IEngine {
     public SimulationEngine(
             MoveDirection[] directions,
             IWorldMap map,
+            Vector2d[] positions,
+            IPositionChangeObserver observer
+    ) {
+        this(directions, map, positions);
+        this.observer = observer;
+    }
+
+    public SimulationEngine(
+            MoveDirection[] directions,
+            IWorldMap map,
             Vector2d[] positions
     ){
         this.map = map;
@@ -88,11 +100,16 @@ public class SimulationEngine implements IEngine {
             this.setupWindow();
     }
 
+    @Override
     public void run() {
         int n = this.animals.size();
 
         for (int i = 0; i < this.directions.length; i++ ) {
             this.animals.get(i % n).move(this.directions[i]);
+            if ( this.observer != null ) {
+                this.observer.positionChanged(null, null);
+            }
+
             if ( this.isWindowActive ) {
                 this.sleep(sleepTime);
                 updateWindow(this.map.toString());

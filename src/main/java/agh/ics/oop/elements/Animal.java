@@ -54,4 +54,18 @@ public class Animal extends AbstractWorldMapElement {
         }
     }
 
+    @Override
+    public String getImagePath() {
+        return resourcePrefix + switch (this.orientation) {
+            case NORTH -> "up";
+            case EAST -> "right";
+            case WEST -> "left";
+            case SOUTH -> "down";
+        } + ".png";
+    }
+
+    @Override
+    public String getImageLabel() {
+        return this.position.toString();
+    }
 }
