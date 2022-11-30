@@ -11,10 +11,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class GuiElementBox {
-    private int gridSize = 20;
     private Image image;
-    private ImageView view;
-    private Label position;
+    private final ImageView view;
+    private final Label label;
 
     public VBox container;
 
@@ -23,25 +22,26 @@ public class GuiElementBox {
         IMapElement element
     ) throws FileNotFoundException {
         String url = "";
-        String label = "";
+        String labelText = "";
 
         if ( element != null ) {
             url = element.getImagePath();
-            label = element.getImageLabel();
+            labelText = element.getImageLabel();
         }
 
         this.image = url.length() > 0 ? new Image( new FileInputStream(url)) : null;
         this.view = new ImageView(this.image);
 
-        this.view.setFitHeight(this.gridSize);
-        this.view.setFitWidth(this.gridSize);
+        int gridSize = 20;
+        this.view.setFitHeight(gridSize);
+        this.view.setFitWidth(gridSize);
 
-        this.position = new Label( label );
+        this.label = new Label( labelText );
 
         this.container = new VBox();
 
         this.container.getChildren().add(this.view);
-        this.container.getChildren().add(this.position);
+        this.container.getChildren().add(this.label);
 
         this.container.setAlignment(Pos.CENTER);
     }
@@ -50,11 +50,11 @@ public class GuiElementBox {
         if (element == null) {
             this.image = null;
             this.view.setImage(this.image);
-            this.position.setText("");
+            this.label.setText("");
         } else {
             this.image = new Image(element.getImagePath());
             this.view.setImage(this.image);
-            this.position.setText(element.getPosition().toString());
+            this.label.setText(element.getPosition().toString());
         }
     }
 }
