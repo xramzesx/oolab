@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 public class SimulationEngine implements IEngine, Runnable {
-
+    private int currentAnimal = 0;
     private IPositionChangeObserver observer;
     private final IWorldMap map;
     private final ArrayList<Animal> animals = new ArrayList<>();
-    private final MoveDirection[] directions;
+    private MoveDirection[] directions;
 
     private boolean isWindowActive = false;
     private JFrame frame;
@@ -103,9 +103,11 @@ public class SimulationEngine implements IEngine, Runnable {
     @Override
     public void run() {
         int n = this.animals.size();
-
+        if ( this.observer != null ) {
+            this.observer.positionChanged(null, null);
+        }
         for (int i = 0; i < this.directions.length; i++ ) {
-            this.animals.get(i % n).move(this.directions[i]);
+            this.animals.get(this.currentAnimal).move(this.directions[i]);
             if ( this.observer != null ) {
                 this.observer.positionChanged(null, null);
             }
@@ -114,11 +116,16 @@ public class SimulationEngine implements IEngine, Runnable {
                 this.sleep(sleepTime);
                 updateWindow(this.map.toString());
             }
+            this.currentAnimal = (this.currentAnimal + 1) % n;
         }
         if ( this.isWindowActive )
             this.closeWindow();
     }
 
+
+    public void setDirections( MoveDirection[] moveDirections ){
+        this.directions = moveDirections;
+    }
     public ArrayList<Animal> getAnimals() {
         return animals;
     }

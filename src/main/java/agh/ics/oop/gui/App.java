@@ -13,15 +13,17 @@ import agh.ics.oop.utilities.OptionsParser;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 
 import static java.lang.System.out;
 
@@ -42,22 +44,54 @@ public class App extends Application implements IPositionChangeObserver {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        //// PREPARE GUI ////
+
+        Button startButton = new Button("Start");
+        TextField textField = new TextField();
+        TextField delayField = new TextField();
+
+        Label errorMessage = new Label("");
+
+        delayField.setText(String.valueOf(moveDelay));
+        textField.setText(
+            String.join(" ", getParameters().getRaw())
+        );
+
+        HBox hBox = new HBox();
+        hBox.getChildren().add(textField);
+        hBox.getChildren().add(delayField);
+        hBox.getChildren().add(startButton);
+        hBox.setAlignment(Pos.CENTER);
+
+        this.grid = new GridPane();
+        this.grid.setGridLinesVisible(true);
+        HBox gridContainer = new HBox();
+        gridContainer.getChildren().add(this.grid);
+        gridContainer.setAlignment(Pos.CENTER);
+
+        VBox vBox = new VBox();
+        vBox.getChildren().add(hBox);
+        vBox.getChildren().add(errorMessage);
+//        vBox.getChildren().add(this.grid);
+        vBox.getChildren().add(gridContainer);
+
+
+        this.scene = new Scene(
+                vBox,
+                windowWidth,
+                windowHeight
+        );
+
+        //// START SIMULATION ////
+
         try {
-            MoveDirection[] directions = OptionsParser
-                .parse(
-                    getParameters()
-                        .getRaw()
-                        .toArray(new String[0])
-                );
+            MoveDirection[] directions = {};
 
             this.map = new GrassField(10);
 
             Vector2d[] positions = { new Vector2d(2, 2), new Vector2d(3, 4)};
 
-            this.engine = new SimulationEngine(directions, this.map, positions, this::positionChanged);
-
-            this.grid = new GridPane();
-            this.grid.setGridLinesVisible(true);
+            this.engine = new SimulationEngine(directions, this.map, positions, this);
 
             Platform.runLater(()->{
                 try {
@@ -69,14 +103,6 @@ public class App extends Application implements IPositionChangeObserver {
 
             this.engineThread = new Thread((Runnable) this.engine);
 
-
-            this.engineThread.start();
-            this.scene = new Scene(
-                    grid,
-                    windowWidth,
-                    windowHeight
-            );
-
             System.out.println(this.engine);
 
             primaryStage.setScene(this.scene);
@@ -84,6 +110,28 @@ public class App extends Application implements IPositionChangeObserver {
 
             this.stage = primaryStage;
             this.stage.setMaximized(true);
+
+            startButton.setOnAction( (e) -> {
+                if ( !engineThread.isAlive() ) {
+                    errorMessage.setText("");
+
+                    try {
+                        this.moveDelay = Integer.parseInt( delayField.getText() );
+
+                        this.engineThread = new Thread((Runnable) this.engine);
+                        this.engine.setDirections(
+                                OptionsParser.parse(textField.getText().split(" "))
+                        );
+                        this.engineThread.start();
+                        
+                    } catch (NumberFormatException ex){
+                        errorMessage.setText("Error: \""+ delayField.getText() + "\" is not an integer");
+                    } catch (IllegalArgumentException ex) {
+                        errorMessage.setText("Error: "+ ex.getMessage());
+                    }
+                }
+
+            });
         } catch (IllegalArgumentException e) {
             out.println("\nIllegal argument: " + e.getMessage() + "\n" );
             primaryStage.close();
